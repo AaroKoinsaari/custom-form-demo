@@ -1,0 +1,1 @@
+This project is part of demo tasks for Startup Greece 2nd round of recruiting process.
