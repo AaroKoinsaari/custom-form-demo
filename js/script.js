@@ -15,68 +15,68 @@ $(document).ready(function () {
 
     // Adds new text field
     function addTextField(count) {
-        const div = $('<div>')
+        const $div = $('<div>')
             .addClass('field-wrapper')
             .attr('id', `field-${count}`);
 
-        const inputHeader = $('<input>').attr({
+        const $inputHeader = $('<input>').attr({
             type: 'text',
             name: `header-text-${count}`,
             placeholder: `Header ${count}`
         });
 
-        const inputValue = $('<input>').attr({
+        const $inputValue = $('<input>').attr({
             type: 'text',
             name: `value-text-${count}`,
             placeholder: `Value ${count}`
         });
 
-        const removeButton = $('<button>')
+        const $removeButton = $('<button>')
             .attr('type', 'button')
             .addClass('remove-field')
             .text('Remove');
 
-        removeButton.click(function () {
+        $removeButton.click(function () {
             $(this).closest('.field-wrapper').remove();
             updateCount();
         });
 
-        div.append(inputHeader, inputValue, removeButton);
-        $('#form-container').append(div);
+        $div.append($inputHeader, $inputValue, $removeButton);
+        $('#form-container').append($div);
     }
 
     // Adds new selection field
     function addSelectField(count) {
-        const div = $('<div>')
+        const $div = $('<div>')
             .addClass('field-wrapper')
             .attr('id', `field-${count}`);
 
-        const selectHeader = $('<input>').attr({
+        const $selectHeader = $('<input>').attr({
             type: 'text',
             name: `select-header-${count}`,
             placeholder: `Select Header ${count}`
         });
 
-        const select = $('<select>').attr({
+        const $select = $('<select>').attr({
             name: `select-${count}`
         }).append(
             $('<option>', { value: 'yes', text: 'Yes' }),
             $('<option>', { value: 'no', text: 'No' })
         );
 
-        const removeButton = $('<button>')
+        const $removeButton = $('<button>')
             .attr('type', 'button')
             .addClass('remove-field')
             .text('Remove');
 
         // Removes the specified field
-        removeButton.click(function () {
+        $removeButton.click(function () {
             $(this).closest('.field-wrapper').remove();
             updateCount();
         });
 
-        div.append(selectHeader, select, removeButton);
-        $('#form-container').append(div);
+        $div.append($selectHeader, $select, $removeButton);
+        $('#form-container').append($div);
     }
 
     // Update field count and re-index fields
@@ -111,5 +111,26 @@ $(document).ready(function () {
         // Clear the form and reset the field count
         $('#form-container').find('.field-wrapper').remove();
         fieldCount = 0;
+
+        // Generate new table
+        var $table = $('<table>').addClass('table-wrapper');
+        var $thead = $('<thead>')
+            .append($('<tr>')
+                .append($('<th>')
+                    .text('Field Name'),
+                    $('<th>').text('Value')));
+        var $tbody = $('<tbody>');
+
+        $.each(formData, function (field, value) {
+            var $row = $('<tr>')
+                .append($('<td>')
+                    .text(field),
+                    $('<td>').text(value));
+            $tbody.append($row);
+        });
+
+        // Compile and add the table to the container
+        $table.append($thead, $tbody);
+        $('#table-container').empty().append($table);
     });
 });
