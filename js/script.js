@@ -24,14 +24,14 @@ $(document).ready(function () {
         // General input-header for all types
         const $header = $('<input>').attr({
             type: 'text',
-            name: `${type}-header-${count}`,
+            name: `${type}-header`,
             placeholder: `Header ${count}`
         });
 
         if (type === "text") {
             $field = $('<input>').attr({
                 type: 'text',
-                name: `${type}-value-${count}`,
+                name: `${type}-value`,
                 placeholder: `Value ${count}`
             });
         } else if (type === "select") {
@@ -52,7 +52,7 @@ $(document).ready(function () {
 
         // Add all elements to div
         $div.append($header, $field, $removeButton);
-        $('#form-container').append($div);
+        $('#dynamic-form').append($div);
     }
 
     // Update field count and re-index fields
@@ -119,26 +119,19 @@ $(document).ready(function () {
         return formData;
     }
 
-    // Generates table from given data
     function generateTable(formData) {
         var $table = $('<table>').addClass('table-wrapper');
-        var $thead = $('<thead>')
-            .append($('<tr>')
-                .append($('<th>')
-                    .text('Field Name'),
-                    $('<th>').text('Value')));
         var $tbody = $('<tbody>');
 
-        $.each(formData, function (field, value) {
-            var $row = $('<tr>')
-                .append($('<td>')
-                    .text(field),
-                    $('<td>').text(value));
+        $.each(formData, function (header, value) {
+            var $row = $('<tr>').append(
+                $('<td>').text(header),
+                $('<td>').text(value)
+            );
             $tbody.append($row);
         });
 
-        // Compile and add the table to the container
-        $table.append($thead, $tbody);
+        $table.append($tbody);
         $('#table-container').empty().append($table);
     }
 
