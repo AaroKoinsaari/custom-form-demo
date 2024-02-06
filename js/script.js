@@ -72,24 +72,52 @@ $(document).ready(function () {
         fieldCount = $('.field-wrapper').length;
     }
 
-    // Handle form submit
+    // Event handler for submit
     $('#submit-form').click(function (e) {
         e.preventDefault();
-        var formData = {};
+
+        if (!validateFormFields()) {
+            return;
+        }
+
+        const formData = collectFormData();
+        console.log(formData);
+        generateTable(formData);
+
+        resetForm();
+    });
+
+    // Function to validate form fields
+    function validateFormFields() {
+        let isValid = true;
+        $('.field-wrapper').each(function () {
+            const header = $(this).find('input[type="text"]').val();
+            const value = $(this).find('input[type="text"], select').last().val();
+
+            if (!validateText(header) || !validateText(value)) {
+                alert('Please enter valid text for headers and values.');
+                isValid = false;
+                return false;
+            }
+        });
+        return isValid;
+    }
+
+    // Validates text fields to not be empty or whitespace
+    function validateText(value) {
+        return value.trim() !== '';
+    }
+
+    // Collects form data
+    function collectFormData() {
+        const formData = {};
         $('.field-wrapper').each(function () {
             const header = $(this).find('input[type="text"]').val();
             const value = $(this).find('input[type="text"], select').last().val();
             formData[header] = value;
         });
-
-        console.log(formData);
-        generateTable(formData);
-
-        // Clear the form and reset the field count
-        $('#form-container').find('.field-wrapper').remove();
-        fieldCount = 0;
-
-    });
+        return formData;
+    }
 
     // Generates table from given data
     function generateTable(formData) {
@@ -112,5 +140,11 @@ $(document).ready(function () {
         // Compile and add the table to the container
         $table.append($thead, $tbody);
         $('#table-container').empty().append($table);
+    }
+
+    // Resets the form
+    function resetForm() {
+        $('#form-container').find('.field-wrapper').remove();
+        fieldCount = 0;
     }
 });
