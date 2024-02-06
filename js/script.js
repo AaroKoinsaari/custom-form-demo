@@ -4,78 +4,54 @@ $(document).ready(function () {
     // Adds text field
     $('#add-text').click(function () {
         fieldCount++;
-        addTextField(fieldCount);
+        addField("text", fieldCount);
     });
 
     // Adds selection field
     $('#add-select').click(function () {
         fieldCount++;
-        addSelectField(fieldCount);
+        addField("select", fieldCount);
     });
 
-    // Adds new text field
-    function addTextField(count) {
+    // Adds new field based on the type given as parameter
+    function addField(type, count) {
         const $div = $('<div>')
             .addClass('field-wrapper')
             .attr('id', `field-${count}`);
 
-        const $inputHeader = $('<input>').attr({
+        let $field; // Field that is created dynamically by the type
+
+        // General input-header for all types
+        const $header = $('<input>').attr({
             type: 'text',
-            name: `header-text-${count}`,
+            name: `${type}-header-${count}`,
             placeholder: `Header ${count}`
         });
 
-        const $inputValue = $('<input>').attr({
-            type: 'text',
-            name: `value-text-${count}`,
-            placeholder: `Value ${count}`
-        });
+        if (type === "text") {
+            $field = $('<input>').attr({
+                type: 'text',
+                name: `${type}-value-${count}`,
+                placeholder: `Value ${count}`
+            });
+        } else if (type === "select") {
+            $field = $('<select>')
+                .attr({ name: `${type}-value-${count}` })
+                .append($('<option>', { value: 'yes', text: 'Yes' }),
+                    $('<option>', { value: 'no', text: 'No' }));
+        }
 
         const $removeButton = $('<button>')
             .attr('type', 'button')
             .addClass('remove-field')
-            .text('Remove');
+            .text('Remove')
+            .click(function () {
+                $(this).closest('.field-wrapper').remove();
+                updateCount();
+            });
 
-        $removeButton.click(function () {
-            $(this).closest('.field-wrapper').remove();
-            updateCount();
-        });
-
-        $div.append($inputHeader, $inputValue, $removeButton);
-        $('#form-container').append($div);
-    }
-
-    // Adds new selection field
-    function addSelectField(count) {
-        const $div = $('<div>')
-            .addClass('field-wrapper')
-            .attr('id', `field-${count}`);
-
-        const $selectHeader = $('<input>').attr({
-            type: 'text',
-            name: `select-header-${count}`,
-            placeholder: `Select Header ${count}`
-        });
-
-        const $select = $('<select>').attr({
-            name: `select-${count}`
-        }).append(
-            $('<option>', { value: 'yes', text: 'Yes' }),
-            $('<option>', { value: 'no', text: 'No' })
-        );
-
-        const $removeButton = $('<button>')
-            .attr('type', 'button')
-            .addClass('remove-field')
-            .text('Remove');
-
-        // Removes the specified field
-        $removeButton.click(function () {
-            $(this).closest('.field-wrapper').remove();
-            updateCount();
-        });
-
-        $div.append($selectHeader, $select, $removeButton);
+        // Add all elements to div
+        $div.append($header, $field, $removeButton);
         $('#form-container').append($div);
     }
 
