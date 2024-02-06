@@ -83,12 +83,16 @@ $(document).ready(function () {
         });
 
         console.log(formData);
+        generateTable(formData);
 
         // Clear the form and reset the field count
         $('#form-container').find('.field-wrapper').remove();
         fieldCount = 0;
 
-        // Generate new table
+    });
+
+    // Generates table from given data
+    function generateTable(formData) {
         var $table = $('<table>').addClass('table-wrapper');
         var $thead = $('<thead>')
             .append($('<tr>')
@@ -108,5 +112,5 @@ $(document).ready(function () {
         // Compile and add the table to the container
         $table.append($thead, $tbody);
         $('#table-container').empty().append($table);
-    });
+    }
 });
