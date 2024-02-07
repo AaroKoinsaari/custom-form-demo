@@ -44,14 +44,14 @@ $(document).ready(function () {
         const $removeButton = $('<button>')
             .attr('type', 'button')
             .addClass('remove-field')
-            .text('Remove')
+            .text('X')
             .click(function () {
                 $(this).closest('.field-wrapper').remove();
                 updateCount();
             });
 
         // Add all elements to div
-        $div.append($header, $field, $removeButton);
+        $div.append($removeButton, $header, $field);
         $('#dynamic-form').append($div);
     }
 

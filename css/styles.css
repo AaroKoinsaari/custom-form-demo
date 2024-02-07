@@ -8,7 +8,26 @@ body {
 #form-container,
 #table-container {
     width: 50%;
+}
+
+.field-wrapper {
+    display: flex;
+    padding: 3px
+}
+
+#dynamic-form {
+    min-height: 25em;
+    height: auto;
     border: 1px solid #ccc;
+}
+
+input,
+select {
+    margin: 3px;
+}
+
+.remove-field {
+    float: left;
 }
 
 .table-wrapper {
@@ -32,4 +51,17 @@ body {
 .table-wrapper td:first-child {
     background-color: #f2f2f2;
     font-weight: bold;
+}
+
+.remove-field {
+    background: none;
+    border: none;
+    color: #ee7575;
+    cursor: pointer;
+    padding: 0;
+    font-size: 16px;
+}
+
+.remove-field:hover {
+    color: red;
 }
