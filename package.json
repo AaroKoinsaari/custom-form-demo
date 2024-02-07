@@ -1,0 +1,15 @@
+{
+  "name": "custom-form-demo",
+  "version": "1.0.0",
+  "description": "This project is part of demo tasks for Startup Greece 2nd round of recruiting process.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.18.2"
+  }
+}
