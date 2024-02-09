@@ -24,6 +24,7 @@ $(document).ready(function () {
         // General input-header for all types
         const $header = $('<input>').attr({
             type: 'text',
+            id: `${type}-header`,
             name: `${type}-header`,
             placeholder: `Header ${count}`
         });
@@ -81,9 +82,25 @@ $(document).ready(function () {
         }
 
         const formData = collectFormData();
-        console.log(formData);
-        generateTable(formData);
 
+        // Send form data to the server using AJAX
+        $.ajax({
+            url: '/submit-form',
+            type: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify({ fields: formData }),  // Convert to JSON format
+            success: function (response) {
+                console.log('Data submitted successfully: ', response);
+                // TODO: notify the user
+            },
+            error: function (xhr, status, error) {
+                console.error('Error submitting the form: ', error)
+                // TODO: notify the user
+            }
+        });
+
+        // console.log(formData);
+        generateTable(formData);
         resetForm();
     });
 
