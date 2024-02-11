@@ -13,7 +13,6 @@ $(document).ready(function () {
         addField("select", fieldCount);
     });
 
-    // Adds new field based on the type given as parameter
     function addField(type, count) {
         const $div = $('<div>')
             .addClass('field-wrapper')
@@ -21,13 +20,33 @@ $(document).ready(function () {
 
         let $field; // Field that is created dynamically by the type
 
-        // General input-header for all types
-        const $header = $('<input>').attr({
-            type: 'text',
-            id: `${type}-header`,
-            name: `${type}-header`,
-            placeholder: `Header ${count}`
-        });
+        // Create a header as an editable span element
+        const $headerSpan = $('<span>')
+            .attr({
+                id: `${type}-header-${count}`,
+                class: 'edit-header',
+                tabindex: '0'
+            })
+            .text(`Header ${count}`)
+            .on('click', function () {
+                // Convert to textfield for editing
+                const $input = $('<input>').attr({
+                    type: 'text',
+                    id: `${type}-header-${count}`,
+                    name: `${type}-header`,
+                    value: $(this).text() // Set existing text as value
+                }).on('blur keydown', function (e) {
+                    if (e.type === 'blur' || e.key === 'Enter') {
+                        e.preventDefault();
+                        // Update span to show the new value and convert back to text
+                        $headerSpan.text($(this).val());
+                        $(this).replaceWith($headerSpan);
+                    }
+                });
+
+                $(this).replaceWith($input);
+                $input.focus().select();
+            });
 
         if (type === "text") {
             $field = $('<input>').attr({
@@ -51,10 +70,11 @@ $(document).ready(function () {
                 updateCount();
             });
 
-        // Add all elements to div
-        $div.append($removeButton, $header, $field);
+        // Add elements to div
+        $div.append($removeButton, $headerSpan, $field); // Use $headerSpan instead of $header
         $('#dynamic-form').append($div);
     }
+
 
     // Update field count and re-index fields
     function updateCount() {
