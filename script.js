@@ -18,27 +18,30 @@ $(document).ready(function () {
             .addClass('field-wrapper')
             .attr('id', `field-${count}`);
 
-        let $field; // Field that is created dynamically by the type
-
-        const $headerSpan = $('<span>') // Create a header as an editable span element
+        const $label = $('<label>')  // Header element
             .attr({
-                id: `${type}-header-${count}`,
                 class: 'edit-header',
                 tabindex: '0'
             })
             .text(`Header ${count}`);
 
+        let $field; // Field that is created dynamically by the type
         if (type === "text") {
             $field = $('<input>').attr({
                 type: 'text',
-                name: `${type}-value`,
+                name: `${type}-value-${count}`,
                 placeholder: `Value ${count}`
             });
-        } else if (type === "select") {
-            $field = $('<select>')
-                .attr({ name: `${type}-value-${count}` })
-                .append($('<option>', { value: 'yes', text: 'Yes' }),
-                    $('<option>', { value: 'no', text: 'No' }));
+        } else {
+            $field = $('<select>').attr({
+                name: `${type}-value-${count}`
+            }).append($('<option>', {
+                value: 'yes',
+                text: 'Yes'
+            }), $('<option>', {
+                value: 'no',
+                text: 'No'
+            }));
         }
 
         const $removeButton = $('<button>')
@@ -51,7 +54,7 @@ $(document).ready(function () {
             });
 
         // Add elements to div
-        $div.append($removeButton, $headerSpan, $field);
+        $div.append($removeButton, $label, $field);
         $('#dynamic-form').append($div);
     }
 

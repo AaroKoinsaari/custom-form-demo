@@ -15,12 +15,6 @@ body {
     background-color: aquamarine;
 }
 
-.edit-header {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
 .edit-header::after {
     content: ':';
 }
