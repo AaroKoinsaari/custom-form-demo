@@ -66,9 +66,15 @@ $(document).ready(function () {
         }).on('blur keydown', function (e) {
             if (e.type === 'blur' || e.key === 'Enter') {
                 e.preventDefault();
-                const newText = $(this).val();
-                $this.text(newText);
-                $(this).replaceWith($this);
+                let newText = $(this).val().trim();
+
+                // Force focus if input is empty
+                if (newText === '') {
+                    $(this).focus();
+                } else {  // Convert input back to span with its new value
+                    $this.text(newText);
+                    $(this).replaceWith($this);
+                }
             }
         });
 
