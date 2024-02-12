@@ -129,7 +129,7 @@ $(document).ready(function () {
     function validateFormFields() {
         let isValid = true;
         $('.field-wrapper').each(function () {
-            const header = $(this).find('input[type="text"]').val();
+            const header = $(this).find('.edit-header').text();
             const value = $(this).find('input[type="text"], select').last().val();
 
             if (!validateText(header) || !validateText(value)) {

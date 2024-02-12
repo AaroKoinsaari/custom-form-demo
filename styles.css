@@ -15,9 +15,21 @@ body {
     background-color: aquamarine;
 }
 
+.edit-header {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.edit-header::after {
+    content: ':';
+}
+
 .field-wrapper {
     display: flex;
-    padding: 3px
+    align-items: center;
+    padding: 3px;
+    gap: 10px;
 }
 
 #dynamic-form {
