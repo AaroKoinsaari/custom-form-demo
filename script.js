@@ -6,19 +6,24 @@
 $(document).ready(function () {
     let fieldCount = 0;  // Keeps track of added fields
 
-    // Add a text input field
+    // Event handler for adding a text input field to the form
     $('#add-text').click(() => {
         fieldCount++;
         addField("text", fieldCount);
     });
 
-    // Add a selection dropdown field
+    // Event handler for adding a selection dropdown field to the form
     $('#add-select').click(() => {
         fieldCount++;
         addField("select", fieldCount);
     });
 
-    // Adds new field by given type
+    /**
+     * Dynamically adds a new field of the specified type to the form.
+     * 
+     * @param {string} type The type of field to add (text or select).
+     * @param {number} count The ordinal number of the field.
+     */
     function addField(type, count) {
         const $div = $('<div>')
             .addClass('field-wrapper')
@@ -64,7 +69,12 @@ $(document).ready(function () {
         $('#dynamic-form').append($div);
     }
 
-    // Set and display custom validity message for an element
+    /**
+     * Sets a custom validity message for a form element and displays it.
+     * 
+     * @param {HTMLElement} element The form element to which the custom validity message is displayed.
+     * @param {string} message The custom validity message to display.
+     */
     function setAndReportValidity(element, message) {
         element.setCustomValidity(message);
         element.reportValidity();
@@ -75,7 +85,10 @@ $(document).ready(function () {
         });
     }
 
-    // Handle click events on input fields within the form
+    /**
+     * Click event listener to edit-header elements in the form.
+     * Enables editing of headers by replacing them with a text input field.
+     */
     $('#dynamic-form').on('click', '.edit-header', function () {
         const originalElement = $(this);
         const currentText = originalElement.text();
@@ -87,9 +100,16 @@ $(document).ready(function () {
             keydown: handleInputEvents
         });
 
+        // Replace the header with a temporary input for editing
         originalElement.replaceWith(tempInput);
         tempInput.focus().select();
 
+        /**
+         * Handles blur and Enter-button press events for the temporary input field.
+         * Validates the input value and updates the original header element or maintains focus for correction.
+         * 
+         * @param {Event} e The event object.
+         */
         function handleInputEvents(e) {
             if (e.type === 'blur' || e.key === 'Enter') {
                 e.preventDefault();
@@ -107,7 +127,9 @@ $(document).ready(function () {
         }
     });
 
-    // Updates field count and re-indexes fields
+    /**
+     * Reindexes fields to maintain sequential order and updates the global field count.
+     */
     function updateCount() {
         $('.field-wrapper').each(function (index) {
             const newIndex = index + 1;  // New index representing the visual order
@@ -129,13 +151,14 @@ $(document).ready(function () {
         fieldCount = $('.field-wrapper').length;
     }
 
-    // Event handler for submit
+    /**
+     * Handles form submission, validation, and sends data using AJAX request.
+     */
     $('#submit-form').click(function (e) {
         e.preventDefault();
         if (!validateFormFields()) {
             return;
         }
-
         const formData = collectFormData();
 
         // Send form data to the server using AJAX
@@ -159,7 +182,13 @@ $(document).ready(function () {
         resetForm();
     });
 
-    // Validates fields when saving
+    /**
+     * Validates all dynamic fields in the form before submission.
+     * Checks for empty text inputs or unselected select options, 
+     * and displays custom validity message for invalid input.
+     * 
+     * @returns {boolean} True if all fields are valid, false otherwise.
+     */
     function validateFormFields() {
         let isValid = true;
 
@@ -196,7 +225,12 @@ $(document).ready(function () {
         return isValid;
     }
 
-    // Helper function to validate text inputs
+    /**
+     * Validates that a text input's value is not empty.
+     * 
+     * @param {string} value The value of the text input to validate.
+     * @returns {boolean} True if the value is not empty, false otherwise.
+     */
     function validateText(value) {
         return value.trim() !== '';
     }
@@ -212,7 +246,11 @@ $(document).ready(function () {
         return formData;
     }
 
-    // Genearates table from the data
+    /**
+     * Generates and displays a table based on the submitted form data.
+     * 
+     * @param {Object} formData The collected data from the form.
+     */
     function generateTable(formData) {
         var $table = $('<table>').addClass('table-wrapper');
         var $tbody = $('<tbody>');
@@ -229,7 +267,10 @@ $(document).ready(function () {
         $('#table-container').empty().append($table);
     }
 
-    // Resets the form
+    /**
+     * Resets the dynamic form to its initial state, clears
+     * all dynamically added fields and resets the field counter.
+     */
     function resetForm() {
         $('#form-container').find('.field-wrapper').remove();
         fieldCount = 0;
