@@ -14,8 +14,12 @@ $(document).ready(function () {
 
     // Event handler for adding a selection dropdown field to the form
     $('#add-select').click(() => {
-        fieldCount++;
-        addField("select", fieldCount);
+        showSelectOptionsModal().then(options => {
+            if (options) {
+                fieldCount++;
+                addField("select", fieldCount, options);
+            }
+        });
     });
 
     /**
@@ -23,6 +27,7 @@ $(document).ready(function () {
      * 
      * @param {string} type The type of field to add (text or select).
      * @param {number} count The ordinal number of the field.
+     * @param {Array} [options] Optional. The options for select fields.
      */
     function addField(type, count) {
         const $div = $('<div>')
@@ -46,13 +51,14 @@ $(document).ready(function () {
         } else {
             $field = $('<select>').attr({
                 name: `${type}-value-${count}`
-            }).append($('<option>', {
-                value: 'yes',
-                text: 'Yes'
-            }), $('<option>', {
-                value: 'no',
-                text: 'No'
-            }));
+            });
+            // Append options provided by the user
+            options.forEach(option => {
+                $field.append($('<option>', {
+                    value: option.value,
+                    text: option.text
+                }));
+            });
         }
 
         const $removeButton = $('<button>')
@@ -67,6 +73,10 @@ $(document).ready(function () {
         // Add elements to div
         $div.append($removeButton, $label, $field);
         $('#dynamic-form').append($div);
+    }
+
+    function showSelectOptionsModal() {
+        // TODO
     }
 
     /**
