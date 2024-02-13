@@ -134,19 +134,29 @@ $(document).ready(function () {
         $('.field-wrapper').each(function (index) {
             const newIndex = index + 1;  // New index representing the visual order
             $(this).attr('id', `field-${newIndex}`);
-            const $editHeader = $(this).find('.edit-header');
-            // Update the number to reflect new sequence number
-            $editHeader.text(`Header ${newIndex}`);
 
-            $(this).find('input[type="text"]').first().attr({
-                name: `header-text-${newIndex}`,
-                placeholder: `Header ${newIndex}`
-            });
-            $(this).find('input[type="text"], select').last().attr({
-                name: `value-text-${newIndex}`, // Update for both text and select
-                placeholder: `Value ${newIndex}` // Placeholder update only applies to text inputs
+            // Check if the header has been edited by comparing its text with the default "Header ${index}"
+            const $editHeader = $(this).find('.edit-header');
+            const currentHeaderText = $editHeader.text();
+            const isEdited = !currentHeaderText.startsWith(`Header `) || parseInt(currentHeaderText.split(' ')[1]) !== newIndex;
+
+            // Only update the header text if it has not been edited by the user
+            if (!isEdited) {
+                $editHeader.text(`Header ${newIndex}`);
+            }
+
+            // Update the name and placeholder for input or select elements
+            $(this).find('input[type="text"], select').each(function () {
+                const isInput = $(this).is('input');
+                const fieldName = isInput ? `text-value-${newIndex}` : `select-value-${newIndex}`;
+                const fieldPlaceholder = isInput ? `Value ${newIndex}` : '';
+                $(this).attr({
+                    name: fieldName,
+                    placeholder: fieldPlaceholder
+                });
             });
         });
+
         // Update fieldCount based on current fields
         fieldCount = $('.field-wrapper').length;
     }

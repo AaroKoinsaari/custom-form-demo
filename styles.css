@@ -10,11 +10,6 @@ body {
     width: 50%;
 }
 
-#text-header,
-#select-header {
-    background-color: aquamarine;
-}
-
 .edit-header::after {
     content: ':';
 }
