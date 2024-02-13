@@ -164,20 +164,32 @@ $(document).ready(function () {
         let isValid = true;
 
         // Reset custom validity messages before re-validation
-        $('.field-wrapper input, .field-wrapper select').each(function () {
+        $('.field-wrapper .temp-input').each(function () {
             this.setCustomValidity('');
         });
 
+        // Validate each field-wrapper individually
         $('.field-wrapper').each(function () {
-            const header = $(this).find('.edit-header').text();
-            const element = $(this).find('input[type="text"], select').last().get(0); // Get DOM element
-            const value = $(element).val();
+            // Get header text from input if editing, else from static text.
+            const headerInput = $(this).find('.temp-input').get(0);
+            const header = headerInput ? headerInput.value.trim() : $(this).find('.edit-header').text().trim();
 
-            // Set and show custom validity if the value is invalid
-            if (!validateText(header) || !validateText(value)) {
-                setAndReportValidity(element, 'This field cannot be empty');
+            // Get value text from input
+            const valueElement = $(this).find('input[type="text"], select').last().get(0);
+            const value = $(valueElement).val();
+
+            // Check header validity
+            if (!validateText(header)) {
+                setAndReportValidity(headerInput || valueElement, 'This field cannot be empty');
                 isValid = false;
-                return false;  // Exit the loop early if any field is invalid
+                return false; // Stop validation if any header is invalid
+            }
+
+            // Check value validity
+            if (!validateText(value)) {
+                setAndReportValidity(valueElement, 'This field cannot be empty');
+                isValid = false;
+                return false; // Stop validation if any value field is invalid
             }
         });
 
