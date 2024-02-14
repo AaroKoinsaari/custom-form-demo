@@ -312,6 +312,10 @@ $(document).ready(function () {
      * @param {Object} formData The collected data from the form.
      */
     function generateTable(formData) {
+        var $tableContent = $('#table-content');
+        $tableContent.empty(); // Empty previous table
+
+        // Create new table
         var $table = $('<table>').addClass('table-wrapper');
         var $tbody = $('<tbody>');
 
@@ -324,7 +328,7 @@ $(document).ready(function () {
         });
 
         $table.append($tbody);
-        $('#table-container').empty().append($table);
+        $tableContent.append($table);
     }
 
     /**

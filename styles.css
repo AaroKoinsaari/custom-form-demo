@@ -5,6 +5,10 @@ body {
     padding: 20px;
 }
 
+h2 {
+    margin-bottom: 5px;
+}
+
 #form-container,
 #table-container {
     width: 50%;
