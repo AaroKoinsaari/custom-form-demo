@@ -20,8 +20,8 @@ $(document).ready(function () {
     // Event handler for adding a selection dropdown field to the form
     $('#add-select').click(() => {
         showSelectOptionsModal().then(options => {
-            console.log(options);
-            if (options && options.length > 0) {
+            // console.log(options);
+            if (options) {
                 fieldCount++;
                 addField("select", fieldCount, options);
             }
@@ -120,11 +120,14 @@ $(document).ready(function () {
                     return value ? { value: value, text: value } : null;
                 }).get().filter(option => option !== null); // Remove null values
 
-                // Hide the modal
-                $('#selectOptionsModal').hide();
-
-                // Return the options
-                resolve(options);
+                // Check if user made any custom options
+                if (options.length === 0) {
+                    const firstInput = $('.option-input').first();
+                    setAndReportValidity(firstInput[0], 'Please add at least one option.');
+                } else {  // Hide the modal and return options
+                    $('#selectOptionsModal').hide();
+                    resolve(options);
+                }
             });
 
             // Close modal window by pressing X
