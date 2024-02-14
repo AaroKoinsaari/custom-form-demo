@@ -6,6 +6,11 @@
 $(document).ready(function () {
     let fieldCount = 0;  // Keeps track of added fields
 
+    // Tracks the ID of the timeout for form messages, 
+    // to allow cancellation or reset of message display timer
+    let messageTimeoutId;
+
+
     // Event handler for adding a text input field to the form
     $('#add-text').click(() => {
         fieldCount++;
@@ -268,8 +273,11 @@ $(document).ready(function () {
         const messageContainer = $('#form-message');
         messageContainer.text(message).removeClass('success error').addClass(type).show();
 
-        // Hide the message after 5 seconds
-        setTimeout(() => {
+        // Cancel the previous timer if it exists
+        clearTimeout(messageTimeoutId);
+
+        // Set a new timer and store its ID
+        messageTimeoutId = setTimeout(() => {
             messageContainer.hide();
         }, 5000);
     }
