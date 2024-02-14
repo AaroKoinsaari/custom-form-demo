@@ -14,8 +14,13 @@ $(document).ready(function () {
 
     // Event handler for adding a selection dropdown field to the form
     $('#add-select').click(() => {
-        fieldCount++;
-        addField("select", fieldCount);
+        showSelectOptionsModal().then(options => {
+            console.log(options);
+            if (options && options.length > 0) {
+                fieldCount++;
+                addField("select", fieldCount, options);
+            }
+        });
     });
 
     /**
@@ -23,8 +28,9 @@ $(document).ready(function () {
      * 
      * @param {string} type The type of field to add (text or select).
      * @param {number} count The ordinal number of the field.
+     * @param {Array} [options] The options for select fields. Default empty array.
      */
-    function addField(type, count) {
+    function addField(type, count, options = []) {
         const $div = $('<div>')
             .addClass('field-wrapper')
             .attr('id', `field-${count}`);
@@ -37,22 +43,26 @@ $(document).ready(function () {
             .text(`Header ${count}`);
 
         let $field; // Field that is created dynamically by the type
+
         if (type === "text") {
             $field = $('<input>').attr({
                 type: 'text',
                 name: `${type}-value-${count}`,
                 placeholder: `Value ${count}`
             });
-        } else {
+        }
+
+        if (type === "select") {
             $field = $('<select>').attr({
                 name: `${type}-value-${count}`
-            }).append($('<option>', {
-                value: 'yes',
-                text: 'Yes'
-            }), $('<option>', {
-                value: 'no',
-                text: 'No'
-            }));
+            });
+            // Append options provided by the user
+            options.forEach(option => {
+                $field.append($('<option>', {
+                    value: option.value,
+                    text: option.text
+                }));
+            });
         }
 
         const $removeButton = $('<button>')
@@ -67,6 +77,56 @@ $(document).ready(function () {
         // Add elements to div
         $div.append($removeButton, $label, $field);
         $('#dynamic-form').append($div);
+    }
+
+    /**
+     * Shows a modal window for users to input options for a select field.
+     * 
+     * @returns {Promise<Array>} A promise that resolves with an array of option objects
+     * containing the value and text for each option added by the user.
+     */
+    function showSelectOptionsModal() {
+        return new Promise((resolve) => {
+            // Display the modal window
+            $('#selectOptionsModal').show();
+
+            // Clear previous input fields
+            $('#optionInputs').empty().append(
+                '<input type="text" placeholder="Option text" class="option-input" /><br>',
+                '<input type="text" placeholder="Option text" class="option-input" /><br>'
+            );
+
+            // Handle Add Option button click
+            $('#addOption').off('click').on('click', function () {
+                // Append a new input field for the option
+                $('<input>', {
+                    type: 'text',
+                    placeholder: 'Option text',
+                    class: 'option-input'
+                }).appendTo('#optionInputs').after('<br>');
+            });
+
+            // Handle Save button click
+            $('#saveOptions').off('click').on('click', function () {
+                // Collect all options
+                const options = $('.option-input').map(function () {
+                    const value = $(this).val().trim();
+                    // Create an option object if the field has text
+                    return value ? { value: value, text: value } : null;
+                }).get().filter(option => option !== null); // Remove null values
+
+                // Hide the modal
+                $('#selectOptionsModal').hide();
+
+                // Return the options
+                resolve(options);
+            });
+
+            // Close modal window by pressing X
+            $('.close-button').click(function () {
+                $('#selectOptionsModal').hide();
+            });
+        });
     }
 
     /**
@@ -171,26 +231,48 @@ $(document).ready(function () {
         }
         const formData = collectFormData();
 
+        // Check that there is data in the form to be sent
+        if (Object.keys(formData).length === 0) {
+            console.log('Form is empty, not submitting.');
+            displayFormMessage('Cannot submit empty form.', 'error')
+            return;
+        }
+
         // Send form data to the server using AJAX
         $.ajax({
             url: '/submit-form',
             type: 'POST',
             contentType: 'application/json',
             data: JSON.stringify({ fields: formData }),  // Convert to JSON format
-            success: function (response) {
+            success: function (response) {  // Successful submission
                 console.log('Data submitted successfully: ', response);
-                // TODO: notify the user
+                displayFormMessage('Data submitted successfully.', 'success');
+                generateTable(formData);
+                resetForm();
             },
-            error: function (xhr, status, error) {
+            error: function (error) {  // Unsuccessful submission
                 console.error('Error submitting the form: ', error)
-                // TODO: notify the user
+                displayFormMessage('Error submitting the form.', 'error');
+                resetForm();
             }
         });
-
-        // console.log(formData);
-        generateTable(formData);
-        resetForm();
     });
+
+    /**
+     * Displays a message inside the form container to provide feedback to the user.
+     *
+     * @param {string} message The message text to be displayed.
+     * @param {string} type The type of the message ('success' or 'error').
+     */
+    function displayFormMessage(message, type) {
+        const messageContainer = $('#form-message');
+        messageContainer.text(message).removeClass('success error').addClass(type).show();
+
+        // Hide the message after 5 seconds
+        setTimeout(() => {
+            messageContainer.hide();
+        }, 5000);
+    }
 
     /**
      * Validates all dynamic fields in the form before submission.
@@ -262,6 +344,10 @@ $(document).ready(function () {
      * @param {Object} formData The collected data from the form.
      */
     function generateTable(formData) {
+        var $tableContent = $('#table-content');
+        $tableContent.empty(); // Empty previous table
+
+        // Create new table
         var $table = $('<table>').addClass('table-wrapper');
         var $tbody = $('<tbody>');
 
@@ -274,7 +360,7 @@ $(document).ready(function () {
         });
 
         $table.append($tbody);
-        $('#table-container').empty().append($table);
+        $tableContent.append($table);
     }
 
     /**

@@ -6,13 +6,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dynamic Form and Table</title>
     <link rel="stylesheet" href="styles.css">
-    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
-    <script src="script.js"></script>
 </head>
 
 <body>
     <div id="form-container">
+        <h2>Custom Form</h2>
         <form id="dynamic-form">
+            <div id="form-message" class="form-message" style="display: none;"></div>
             <!-- Fields will be added here -->
         </form>
         <div id="button-container">
@@ -22,8 +22,27 @@
         </div>
     </div>
     <div id="table-container">
+        <h2>Table</h2>
         <!-- Table will be generated here -->
+        <div id="table-content"></div>
     </div>
+
+    <!-- Modal Window for adding select options -->
+    <div id="selectOptionsModal" style="display: none;">
+        <div class="modal-content">
+            <span class="close-button">&times;</span>
+            <h2>Add Select Options</h2>
+            <div id="optionInputs">
+                <input type="text" placeholder="Option text" class="option-input" /><br>
+                <input type="text" placeholder="Option text" class="option-input" /><br>
+            </div>
+            <button id="addOption">Add Option</button>
+            <button id="saveOptions">Save</button>
+        </div>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="script.js"></script>
 </body>
+
 
 </html>
