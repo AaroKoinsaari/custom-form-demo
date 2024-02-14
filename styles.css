@@ -1,3 +1,4 @@
+/* Custom Form styles */
 body {
     display: flex;
     align-items: flex-start;
@@ -14,18 +15,10 @@ h2 {
     width: 50%;
 }
 
-.form-message {
-    color: #333;
-    opacity: 0.7;
-}
-
-#text-header,
-#select-header {
-    background-color: aquamarine;
-}
-
-.edit-header::after {
-    content: ':';
+#dynamic-form {
+    min-height: 25em;
+    height: auto;
+    border: 1px solid #ccc;
 }
 
 .field-wrapper {
@@ -35,10 +28,16 @@ h2 {
     gap: 10px;
 }
 
-#dynamic-form {
-    min-height: 25em;
-    height: auto;
-    border: 1px solid #ccc;
+.edit-header {
+    cursor: text;
+}
+
+.edit-header::after {
+    content: ':';
+}
+
+.edit-header:hover {
+    color: #5dade2;
 }
 
 input,
@@ -48,12 +47,29 @@ select {
 
 .remove-field {
     float: left;
+    background: none;
+    border: none;
+    color: #f5b7b1;
+    cursor: pointer;
+    padding: 0;
+    font-size: 16px;
 }
 
+.remove-field:hover {
+    color: #e74c3c;
+}
+
+.form-message {
+    color: #333;
+    opacity: 0.7;
+}
+
+/* Table styles */
 .table-wrapper {
     width: 100%;
     max-height: 100%;
     border-collapse: collapse;
+    table-layout: fixed;
 }
 
 .table-wrapper th,
@@ -61,6 +77,7 @@ select {
     border: 1px solid #ddd;
     padding: 8px;
     text-align: center;
+    width: 50%;
 }
 
 .table-wrapper th {
@@ -73,31 +90,22 @@ select {
     font-weight: bold;
 }
 
-.remove-field {
-    background: none;
-    border: none;
-    color: #ee7575;
-    cursor: pointer;
-    padding: 0;
-    font-size: 16px;
-}
-
-.remove-field:hover {
-    color: red;
-}
-
+/* Modal Window styles */
 #selectOptionsModal {
     display: none;
+    /* Initially hidden */
     position: fixed;
     left: 0;
     top: 0;
     width: 100%;
     height: 100%;
     background-color: rgba(0, 0, 0, 0.4);
-    z-index: 100;
+    /* Semi-transparent background */
     display: flex;
     align-items: center;
     justify-content: center;
+    z-index: 100;
+    /* Ensures modal is above other content */
 }
 
 .modal-content {
@@ -105,7 +113,9 @@ select {
     padding: 20px;
     border: 1px solid #888;
     width: 30%;
+    /* Adjust as needed */
     position: relative;
+    /* Allows for absolute positioning of children */
 }
 
 .close-button {
