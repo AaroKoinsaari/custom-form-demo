@@ -221,6 +221,12 @@ $(document).ready(function () {
         }
         const formData = collectFormData();
 
+        // Check that there is data in the form to be sent
+        if (Object.keys(formData).length === 0) {
+            console.log('Form is empty, not submitting.');
+            return;
+        }
+
         // Send form data to the server using AJAX
         $.ajax({
             url: '/submit-form',
