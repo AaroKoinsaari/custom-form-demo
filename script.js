@@ -15,7 +15,8 @@ $(document).ready(function () {
     // Event handler for adding a selection dropdown field to the form
     $('#add-select').click(() => {
         showSelectOptionsModal().then(options => {
-            if (options) {
+            console.log(options);
+            if (options && options.length > 0) {
                 fieldCount++;
                 addField("select", fieldCount, options);
             }
@@ -75,8 +76,54 @@ $(document).ready(function () {
         $('#dynamic-form').append($div);
     }
 
+    /**
+     * Shows a modal window for users to input options for a select field.
+     * 
+     * @returns {Promise<Array>} A promise that resolves with an array of option objects
+     * containing the value and text for each option added by the user.
+     */
     function showSelectOptionsModal() {
-        // TODO
+        return new Promise((resolve) => {
+            // Display the modal window
+            $('#selectOptionsModal').show();
+
+            // Handle Add Option button click
+            $('#addOption').off('click').on('click', function () {
+                // Append a new input field for the option
+                $('<input>', {
+                    type: 'text',
+                    placeholder: 'Option text',
+                    class: 'option-input'
+                }).appendTo('#optionInputs').after('<br>');
+            });
+
+            // Handle Save button click
+            $('#saveOptions').off('click').on('click', function () {
+                // Collect all options
+                const options = $('.option-input').map(function () {
+                    const value = $(this).val().trim();
+                    // Create an option object if the field has text
+                    return value ? { value: value, text: value } : null;
+                }).get().filter(option => option !== null); // Remove null values
+
+                // Hide the modal
+                $('#selectOptionsModal').hide();
+
+                // Clear input fields for next use
+                $('#optionInputs').empty().append(
+                    '<input type="text" placeholder="Option text" class="option-input" /><br>',
+                    '<input type="text" placeholder="Option text" class="option-input" /><br>'
+                );
+
+                // Return the options
+                resolve(options);
+            });
+
+            // Close modal window by pressing X
+            $('.close-button').click(function () {
+                $('#selectOptionsModal').hide();
+            });
+        });
     }
 
     /**
