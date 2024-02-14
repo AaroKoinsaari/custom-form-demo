@@ -90,6 +90,12 @@ $(document).ready(function () {
             // Display the modal window
             $('#selectOptionsModal').show();
 
+            // Clear previous input fields
+            $('#optionInputs').empty().append(
+                '<input type="text" placeholder="Option text" class="option-input" /><br>',
+                '<input type="text" placeholder="Option text" class="option-input" /><br>'
+            );
+
             // Handle Add Option button click
             $('#addOption').off('click').on('click', function () {
                 // Append a new input field for the option
@@ -111,12 +117,6 @@ $(document).ready(function () {
 
                 // Hide the modal
                 $('#selectOptionsModal').hide();
-
-                // Clear input fields for next use
-                $('#optionInputs').empty().append(
-                    '<input type="text" placeholder="Option text" class="option-input" /><br>',
-                    '<input type="text" placeholder="Option text" class="option-input" /><br>'
-                );
 
                 // Return the options
                 resolve(options);
