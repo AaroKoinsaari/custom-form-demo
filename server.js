@@ -6,7 +6,7 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 
 app.use(express.json()); // Configure Express for JSON
-app.use(express.static(__dirname));
+app.use(express.static(__dirname));  // Serve static files from current directory
 
 // Define route for the root URL
 app.get('/', (req, res) => {

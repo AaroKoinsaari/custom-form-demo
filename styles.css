@@ -1,4 +1,4 @@
-/* Custom Form styles */
+/* General styles */
 body {
     display: flex;
     align-items: flex-start;
@@ -7,9 +7,10 @@ body {
 }
 
 h2 {
-    margin-bottom: 5px;
+    margin: 5px 0px 5px 0px;
 }
 
+/* Custom Form styles */
 #form-container,
 #table-container {
     width: 50%;
@@ -116,6 +117,10 @@ select {
     /* Adjust as needed */
     position: relative;
     /* Allows for absolute positioning of children */
+}
+
+#optionInputs {
+    margin: 10px 0px 10px 0;
 }
 
 .close-button {
