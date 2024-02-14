@@ -224,6 +224,7 @@ $(document).ready(function () {
         // Check that there is data in the form to be sent
         if (Object.keys(formData).length === 0) {
             console.log('Form is empty, not submitting.');
+            displayFormMessage('Cannot submit empty form.', 'error')
             return;
         }
 
@@ -233,20 +234,35 @@ $(document).ready(function () {
             type: 'POST',
             contentType: 'application/json',
             data: JSON.stringify({ fields: formData }),  // Convert to JSON format
-            success: function (response) {
+            success: function (response) {  // Successful submission
                 console.log('Data submitted successfully: ', response);
-                // TODO: notify the user
+                displayFormMessage('Data submitted successfully.', 'success');
+                generateTable(formData);
+                resetForm();
             },
-            error: function (xhr, status, error) {
+            error: function (error) {  // Unsuccessful submission
                 console.error('Error submitting the form: ', error)
-                // TODO: notify the user
+                displayFormMessage('Error submitting the form.', 'error');
+                resetForm();
             }
         });
-
-        // console.log(formData);
-        generateTable(formData);
-        resetForm();
     });
+
+    /**
+     * Displays a message inside the form container to provide feedback to the user.
+     *
+     * @param {string} message The message text to be displayed.
+     * @param {string} type The type of the message ('success' or 'error').
+     */
+    function displayFormMessage(message, type) {
+        const messageContainer = $('#form-message');
+        messageContainer.text(message).removeClass('success error').addClass(type).show();
+
+        // Hide the message after 5 seconds
+        setTimeout(() => {
+            messageContainer.hide();
+        }, 5000);
+    }
 
     /**
      * Validates all dynamic fields in the form before submission.
