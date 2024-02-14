@@ -44,11 +44,11 @@ Make sure you have the following installed:
 
 2. **Access the appliation**
 
-    Open a web browser and navigate to `httphttp://localhost:3000`. You should see the application now running.
+    Open a web browser and navigate to `http://localhost:3000`. You should see the application now running.
 
 ## Usage
 
-- **Add Fields:** Click on "Add Text Field" or "Add Select Field" to add new form fields.
+- **Add Fields:** Click on "Add Text Field" or "Add Select Field" to add new custom form fields.
 - **Edit Headers:** Click on any field header to edit its text.
 - **Remove Fields:** Click the "X" button next to a field to remove it.
 - **Save Data:** Click "Save Data" to submit the form. The data will be saved in `data.json` in the project directory.
