@@ -28,9 +28,9 @@ $(document).ready(function () {
      * 
      * @param {string} type The type of field to add (text or select).
      * @param {number} count The ordinal number of the field.
-     * @param {Array} [options] Optional. The options for select fields.
+     * @param {Array} [options] The options for select fields. Default empty array.
      */
-    function addField(type, count) {
+    function addField(type, count, options = []) {
         const $div = $('<div>')
             .addClass('field-wrapper')
             .attr('id', `field-${count}`);
@@ -43,13 +43,16 @@ $(document).ready(function () {
             .text(`Header ${count}`);
 
         let $field; // Field that is created dynamically by the type
+
         if (type === "text") {
             $field = $('<input>').attr({
                 type: 'text',
                 name: `${type}-value-${count}`,
                 placeholder: `Value ${count}`
             });
-        } else {
+        }
+
+        if (type === "select") {
             $field = $('<select>').attr({
                 name: `${type}-value-${count}`
             });
